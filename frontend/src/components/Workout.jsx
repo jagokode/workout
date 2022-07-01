@@ -1,11 +1,13 @@
 import axios from "axios";
 import { useState } from "react";
 import { useWorkoutContext } from "../hooks/useWorkoutContext";
+// date fns
+import formatDistanceToNow from "date-fns/formatDistanceToNow";
 
 const Workout = ({ workout }) => {
   const [error, setError] = useState(null);
   const date = new Date(workout.createdAt);
-  const timestamp = `${date.toLocaleTimeString()} ${date.toLocaleDateString()}`;
+  // const timestamp = `${date.toLocaleTimeString()} ${date.toLocaleDateString()}`;
   const { dispatch } = useWorkoutContext();
 
   const handleDelete = async () => {
@@ -33,8 +35,13 @@ const Workout = ({ workout }) => {
         <strong>Pengulangan: </strong>
         {workout.reps}
       </p>
-      <p>{timestamp}</p>
-      <span onClick={handleDelete}>Hapus</span>
+      <p>
+        {formatDistanceToNow(new Date(workout.createdAt), { addSuffix: true })}
+      </p>
+      {/* <p>{timestamp}</p> */}
+      <span className="material-symbols-outlined" onClick={handleDelete}>
+        delete
+      </span>
       {error && <div className="error">{error}</div>}
     </div>
   );

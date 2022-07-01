@@ -40,6 +40,16 @@ const singleWorkout = async (req, res) => {
 const addWorkout = async (req, res) => {
   const { title, reps, load } = req.body;
 
+  let kolomKosong = [];
+
+  if (!title) kolomKosong.push("title");
+  if (!load) kolomKosong.push("load");
+  if (!reps) kolomKosong.push("reps");
+  if (kolomKosong.length > 0)
+    return res
+      .status(400)
+      .json({ error: "Silahkan isi semua kolom", kolomKosong });
+
   try {
     const workout = await Workout.create({
       title,
@@ -67,13 +77,11 @@ const deleteWorkout = async (req, res) => {
         .status(400)
         .json({ success: false, error: "Can not delete non-exist workout" });
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "The workout deleted successfully",
-        data: deletedWorkout,
-      });
+    res.status(200).json({
+      success: true,
+      message: "The workout deleted successfully",
+      data: deletedWorkout,
+    });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

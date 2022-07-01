@@ -8,6 +8,7 @@ const Form = () => {
   const [load, setLoad] = useState("");
   const [reps, setReps] = useState("");
   const [error, setError] = useState(null);
+  const [kolomKosong, setKolomKosong] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,9 +22,11 @@ const Form = () => {
       setLoad("");
       setReps("");
       setError(null);
+      setKolomKosong([]);
       dispatch({ type: "CREATE_WORKOUT", payload: response.data.data });
     } catch (error) {
       setError(error.response.data.error);
+      setKolomKosong(error.response.data.kolomKosong);
     }
   };
 
@@ -33,6 +36,7 @@ const Form = () => {
       <label>Judul Latihan</label>
       <input
         type="text"
+        className={kolomKosong.includes("title") ? "error" : ""}
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
@@ -40,6 +44,7 @@ const Form = () => {
       <label>Beban (kg):</label>
       <input
         type="text"
+        className={kolomKosong.includes("load") ? "error" : ""}
         value={load}
         onChange={(e) => setLoad(e.target.value)}
       />
@@ -47,6 +52,7 @@ const Form = () => {
       <label>Pengulangan:</label>
       <input
         type="text"
+        className={kolomKosong.includes("reps") ? "error" : ""}
         value={reps}
         onChange={(e) => setReps(e.target.value)}
       />
